@@ -9,11 +9,14 @@ services:
   peer-base:
     image: hyperledger/fabric-peer:$IMAGE_TAG
     environment:
+      - CORE_PEER_EVENTS_BUFFERSIZE=1000
+      - CORE_PEER_EVENTS_TIMEOUT=100ms 
+      - GODEBUG=netdns=go
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
       # bridge network as the peers
       # https://docs.docker.com/compose/networking/
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_byfn
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_default
       - CORE_LOGGING_LEVEL=INFO
       #- CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_TLS_ENABLED=true

@@ -11,6 +11,7 @@ services:
     container_name: orderer.example.com
     image: hyperledger/fabric-orderer:$IMAGE_TAG
     environment:
+      - GODEBUG=netdns=go
       - ORDERER_GENERAL_LOGLEVEL=INFO
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
@@ -28,7 +29,7 @@ services:
     - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
     - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
     - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
-    - orderer.example.com:/var/hyperledger/production/orderer
+    - ../ledger_backup/orderer.example.com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
 
@@ -38,6 +39,7 @@ services:
       file: peer-base.yaml
       service: peer-base
     environment:
+      - GODEBUG=netdns=go
       - CORE_PEER_ID=peer0.org1.example.com
       - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:7051
@@ -47,7 +49,7 @@ services:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
-        - peer0.org1.example.com:/var/hyperledger/production
+        - ../ledger_backup/peer0.org1.example.com:/var/hyperledger/production
     ports:
       - 7051:7051
       - 7053:7053
@@ -58,6 +60,7 @@ services:
       file: peer-base.yaml
       service: peer-base
     environment:
+      - GODEBUG=netdns=go
       - CORE_PEER_ID=peer1.org1.example.com
       - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:7051
@@ -67,7 +70,7 @@ services:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
-        - peer1.org1.example.com:/var/hyperledger/production
+        - ../ledger_backup/peer1.org1.example.com:/var/hyperledger/production
 
     ports:
       - 8051:7051
@@ -79,6 +82,7 @@ services:
       file: peer-base.yaml
       service: peer-base
     environment:
+      - GODEBUG=netdns=go
       - CORE_PEER_ID=peer0.org2.example.com
       - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
@@ -88,7 +92,7 @@ services:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls:/etc/hyperledger/fabric/tls
-        - peer0.org2.example.com:/var/hyperledger/production
+        - ../ledger_backup/peer0.org2.example.com:/var/hyperledger/production
     ports:
       - 9051:7051
       - 9053:7053
@@ -99,6 +103,7 @@ services:
       file: peer-base.yaml
       service: peer-base
     environment:
+      - GODEBUG=netdns=go
       - CORE_PEER_ID=peer1.org2.example.com
       - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
@@ -108,7 +113,7 @@ services:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
-        - peer1.org2.example.com:/var/hyperledger/production
+        - ../ledger_backup/peer1.org2.example.com:/var/hyperledger/production
     ports:
       - 10051:7051
       - 10053:7053
