@@ -30,8 +30,6 @@ services:
       - "orderer0.example.com:172.16.50.151"
       - "peer0.org1.example.com:172.16.50.151"
       - "peer1.org1.example.com:172.16.50.151"
-      - "peer0.org2.example.com:172.16.50.153"
-      - "peer1.org2.example.com:172.16.50.153"
 
 
   peer1.org2.example.com:
@@ -43,8 +41,6 @@ services:
       - "orderer0.example.com:172.16.50.151"
       - "peer0.org1.example.com:172.16.50.151"
       - "peer1.org1.example.com:172.16.50.151"
-      - "peer0.org2.example.com:172.16.50.153"
-      - "peer1.org2.example.com:172.16.50.153"
 
   cli:
     container_name: cli

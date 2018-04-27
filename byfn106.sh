@@ -33,6 +33,12 @@ export PATH=${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}
 HOST=172.16.50.153
 
+yes | cp configtx.yaml106 ./configtx.yaml
+yes | cp crypto-config.yaml106 ./crypto-config.yaml
+ssh root@$HOST -i ~/.ssh/id_rsa "cd $FABRIC_CFG_PATH/..; rm -rf first-network/*;"
+scp -i ~/.ssh/id_rsa -r ../first-network root@$HOST:$FABRIC_CFG_PATH/..
+
+
 # Print the usage message
 function printHelp () {
   echo "Usage: "
@@ -115,6 +121,8 @@ function startup_network() {
 # Generate the needed certificates, the genesis block and start the network.
 function networkUp () {
   # generate artifacts if they don't exist
+  docker rm -f $(docker ps -aq)
+  rm -rf ./crypto-config
   if [ ! -d "crypto-config" ]; then
     generateCerts
     replacePrivateKey
@@ -124,14 +132,16 @@ function networkUp () {
       IMAGE_TAG=$IMAGETAG CHANNEL_NAME=$CHANNEL_NAME TIMEOUT=$CLI_TIMEOUT DELAY=$CLI_DELAY docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_COUCH up -d 2>&1
   else
       IMAGE_TAG=$IMAGETAG CHANNEL_NAME=$CHANNEL_NAME TIMEOUT=$CLI_TIMEOUT DELAY=$CLI_DELAY docker-compose -f $COMPOSE_FILE1 up -d
+      ssh root@$HOST -i ~/.ssh/id_rsa "cd $FABRIC_CFG_PATH/..; bash ./first-network/clean.sh; rm -rf first-network/*; "
+      scp -i ~/.ssh/id_rsa -r ../first-network root@$HOST:$FABRIC_CFG_PATH/..
       startup_network $HOST $COMPOSE_FILE2
   fi
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Unable to start network"
-    docker logs -f cli
+    # docker logs -f cli
     exit 1
   fi
-  docker logs -f cli
+  # docker logs -f cli
 }
 
 # Tear down running network
@@ -328,7 +338,7 @@ COMPOSE_FILE2=docker-compose-pc2.yaml
 #
 COMPOSE_FILE_COUCH=docker-compose-couch.yaml
 # default image tag
-IMAGETAG="latest"
+IMAGETAG="x86_64-1.0.6"
 # Parse commandline args
 while getopts "h?m:c:t:d:f:s:i:" opt; do
   case "$opt" in

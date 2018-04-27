@@ -31,6 +31,9 @@
 export PATH=${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}
 
+yes | cp configtx.yaml106 ./configtx.yaml
+yes | cp crypto-config.yaml106 ./crypto-config.yaml
+
 # Print the usage message
 function printHelp () {
   echo "Usage: "
